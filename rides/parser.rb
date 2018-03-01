@@ -45,8 +45,8 @@ class Parser
 
   private
   def init_vehicles
-    @num_rides.times do |index|
-      @vehicles.push(Vehicle.new(index + 1, [], Coordinate.new(0,0)))
+    @num_vehicles.times do |index|
+      @vehicles.push(Vehicle.new(index, [], Coordinate.new(0,0)))
     end
   end
 

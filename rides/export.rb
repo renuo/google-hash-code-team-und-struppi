@@ -4,7 +4,7 @@ class Export
 
   def initialize(vehicles, name = nil)
     @vehicles = vehicles
-    @vehicles.keep_if { |vehicle| !vehicle.rides.empty? }
+    # @vehicles.keep_if { |vehicle| !vehicle.rides.empty? }
     @name = name
   end
 
