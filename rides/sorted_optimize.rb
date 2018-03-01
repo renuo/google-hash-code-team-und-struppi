@@ -4,49 +4,52 @@ class SortedOptimize
   def initialize(data)
     @data = data
     # @score_hash = ScoreHash.new(@data)
+    @score_hash = {}
+    @rides_to_do = data.rides.clone
   end
 
   def run
-    @data.caches.each do |cache|
-      @current_cache = cache
-      10.times do
-        @caching_failed = 0
-        while @caching_failed < 100
-          request_description = cache.cache_connections.sample.endpoint.request_descriptions.sample
-          video = request_description.video
-          if @current_cache.cache_size >= video.size && !@current_cache.videos.include?(video)
-            fill_video(video)
-          else
-            @caching_failed += 1
-          end
-        end
 
-        if rand < 0.1
-          videos = @current_cache.videos.sample(3)
-          z = videos.map do |video|
-            score = @score_hash.score_for_assignment(video, @current_cache)
-            [score, video]
-          end.sort_by { |x| x[0] }
-          @current_cache.videos = @current_cache.videos.select { |v| v != z[1] }
-        end
-      end
-
-      @caching_failed = 0
-      while @caching_failed < 100
-        request_description = cache.cache_connections.sample.endpoint.request_descriptions.sample
-        video = request_description.video
-        if @current_cache.cache_size >= video.size && !@current_cache.videos.include?(video)
-          fill_video(video)
-        else
-          @caching_failed += 1
-        end
+    @data.vehicles.each_with_index do |vehicle, index|
+      tick = 0
+      while(tick < @data.num_steps)
+        ride = possible_rides(tick, vehicle).first
+        break if ride.nil?
+        tick = tick + total_duration(ride, vehicle)
+        vehicle.location = ride.coordinate_end
+        @rides_to_do.delete(ride)
       end
     end
   end
 
-  def fill_video(video)
-    @current_cache.videos << video
-    @current_cache.cache_size -= video.size
-    @caching_failed = 0
+  private
+  def possible_rides(tick, vehicle)
+    @rides_to_do.clone.keep_if do |ride|
+      is_able_to_start?(ride, tick) && is_able_to_reach(ride, tick, vehicle)
+    end
+  end
+
+  def is_able_to_reach(ride, tick, vehicle)
+    total_duration_to_destination = total_duration(ride, vehicle)
+    tick + total_duration_to_destination <= ride.finish
+  end
+
+  def total_duration(ride, vehicle)
+    vehicle_distance_to_ride_start = calculate_distance(vehicle.location, ride.coordinate_start)
+    total_duration_to_destination = vehicle_distance_to_ride_start + ride.distance
+  end
+
+  def is_able_to_start?(ride, tick)
+    ride.start <= tick
+  end
+
+  def calculate_distance(start, ende)
+
+    a = start.x
+    b = start.y
+    x = ende.x
+    y = ende.y
+
+    (a-x).abs+(b-y).abs
   end
 end

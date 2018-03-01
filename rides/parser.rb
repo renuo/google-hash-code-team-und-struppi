@@ -1,5 +1,5 @@
 Coordinate = Struct.new(:x, :y)
-Vehicle = Struct.new(:id, :rides)
+Vehicle = Struct.new(:id, :rides, :location)
 Ride = Struct.new(:id, :coordinate_start, :coordinate_end, :start, :finish, :distance)
 
 class Parser
@@ -46,7 +46,7 @@ class Parser
   private
   def init_vehicles
     @num_rides.times do |index|
-      @vehicles.push(Vehicle.new(index + 1, []))
+      @vehicles.push(Vehicle.new(index + 1, [], Coordinate.new(0,0)))
     end
   end
 
