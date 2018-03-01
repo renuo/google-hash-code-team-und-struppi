@@ -5,21 +5,11 @@ class Preprocessing
     @parser = parser
   end
 
-  def preprocess_endpoints
-    @parser.rides.sort { |ride| ride.<=>ride}
-  end
-
-  def preprocess_caches
-    @parser.caches.delete_if { |cache| cache.cache_connections.empty? }
-  end
-
-  def preprocess_videos
-    @parser.videos.delete_if { |video| video.size > @parser.cache_size }
+  def preprocess_rides
+    @parser.rides.sort { |a,b | a.start<=>b.start}
   end
 
   def preprocess
-    preprocess_endpoints
-    preprocess_caches
-    preprocess_videos
+    preprocess_rides
   end
 end

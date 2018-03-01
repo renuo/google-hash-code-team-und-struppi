@@ -1,10 +1,10 @@
 require_relative '../spec_helper'
-require_relative '../../parse/parser'
+require_relative '../../rides/parser'
 
 RSpec.describe Parser do
   context(:example_dataset) do
     let(:parser) do
-      parser = Parser.new('rides/a_example.in')
+      parser = Parser.new('rides/datasets/a_example.in')
       parser.parse
       parser
     end

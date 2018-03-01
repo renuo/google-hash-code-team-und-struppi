@@ -1,6 +1,6 @@
 require_relative 'score_hash'
 
-class RandomOptimizer
+class SortedOptimize
   def initialize(data)
     @data = data
     # @score_hash = ScoreHash.new(@data)
