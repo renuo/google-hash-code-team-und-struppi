@@ -6,7 +6,7 @@ class Preprocessing
   end
 
   def preprocess_rides
-    @parser.rides.sort { |a,b | a.start<=>b.start}
+    @parser.rides.sort! { |a,b | [a.start, a.distance]<=>[b.start, b.distance]}
   end
 
   def preprocess

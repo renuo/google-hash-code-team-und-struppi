@@ -1,0 +1,4 @@
+#!/bin/sh
+
+bin/zip
+ruby rides/main.rb
